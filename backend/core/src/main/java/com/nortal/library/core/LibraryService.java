@@ -74,7 +74,7 @@ public class LibraryService {
 
     Book entity = book.get();
     if (entity.getLoanedTo() == null) {
-      return Result.failure("BOOK_NOT_ON_LOAN");
+      return borrowBook(bookId, memberId);
     }
     if (entity.getReservationQueue().contains(memberId)) {
       return Result.failure("MEMBER_ALREADY_IN_RESERVATION_QUEUE");
