@@ -73,6 +73,12 @@ public class LibraryService {
     }
 
     Book entity = book.get();
+    if (entity.getLoanedTo() == null) {
+      return Result.failure("BOOK_NOT_ON_LOAN");
+    }
+    if (entity.getReservationQueue().contains(memberId)) {
+      return Result.failure("MEMBER_ALREADY_IN_RESERVATION_QUEUE");
+    }
     entity.getReservationQueue().add(memberId);
     bookRepository.save(entity);
     return Result.success();
