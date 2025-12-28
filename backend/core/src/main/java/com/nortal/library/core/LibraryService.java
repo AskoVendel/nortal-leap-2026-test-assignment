@@ -62,12 +62,11 @@ public class LibraryService {
       String candidateMember = entity.getReservationQueue().get(0);
 
       Result candidateResult = borrowBook(bookId, candidateMember);
+      entity.getReservationQueue().remove(0);
+      bookRepository.save(entity);
 
       if (candidateResult.ok) {
         break;
-      } else {
-        entity.getReservationQueue().remove(0);
-        bookRepository.save(entity);
       }
     }
 
