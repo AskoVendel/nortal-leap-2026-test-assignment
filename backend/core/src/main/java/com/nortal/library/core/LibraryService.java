@@ -57,9 +57,22 @@ public class LibraryService {
     }
     entity.setLoanedTo(null);
     entity.setDueDate(null);
+    bookRepository.save(entity);
+    while (!entity.getReservationQueue().isEmpty()) {
+      String candidateMember = entity.getReservationQueue().get(0);
+
+      Result candidateResult = borrowBook(bookId, candidateMember);
+
+      if (candidateResult.ok) {
+        break;
+      } else {
+        entity.getReservationQueue().remove(0);
+        bookRepository.save(entity);
+      }
+    }
+
     String nextMember =
         entity.getReservationQueue().isEmpty() ? null : entity.getReservationQueue().get(0);
-    bookRepository.save(entity);
     return ResultWithNext.success(nextMember);
   }
 
