@@ -55,24 +55,24 @@ public class LibraryService {
     if (entity.getLoanedTo() == null || !entity.getLoanedTo().equals(memberId)) {
       return ResultWithNext.failure();
     }
+
     entity.setLoanedTo(null);
     entity.setDueDate(null);
     bookRepository.save(entity);
+
     while (!entity.getReservationQueue().isEmpty()) {
       String candidateMember = entity.getReservationQueue().get(0);
-
       Result candidateResult = borrowBook(bookId, candidateMember);
+
       entity.getReservationQueue().remove(0);
       bookRepository.save(entity);
 
       if (candidateResult.ok) {
-        break;
+        return ResultWithNext.success(candidateMember);
       }
     }
 
-    String nextMember =
-        entity.getReservationQueue().isEmpty() ? null : entity.getReservationQueue().get(0);
-    return ResultWithNext.success(nextMember);
+    return ResultWithNext.success(null);
   }
 
   public Result reserveBook(String bookId, String memberId) {
