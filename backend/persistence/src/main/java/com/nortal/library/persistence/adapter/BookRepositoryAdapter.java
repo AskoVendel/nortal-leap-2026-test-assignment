@@ -27,6 +27,11 @@ public class BookRepositoryAdapter implements BookRepository {
   }
 
   @Override
+  public int countByLoanedTo(String memberId) {
+    return jpaRepository.countByLoanedTo(memberId);
+  }
+
+  @Override
   public Book save(Book book) {
     return jpaRepository.save(book);
   }

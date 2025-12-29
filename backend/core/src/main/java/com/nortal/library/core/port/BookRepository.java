@@ -9,6 +9,8 @@ public interface BookRepository {
 
   List<Book> findAll();
 
+  int countByLoanedTo(String memberId);
+
   Book save(Book book);
 
   void delete(Book book);
